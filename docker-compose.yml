@@ -1,0 +1,25 @@
+services:
+  agents-runner:
+    build: .
+    container_name: agents-runner
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # 容器内默认通过 Docker 内部 DNS 访问同网络的 RSSHub 服务
+      RSSHUB_BASE_URL: ${RSSHUB_BASE_URL:-http://rsshub:1200}
+    volumes:
+      # 挂载代码与调度表：日常修改提示词、新增 Agent 或调整定时时间无需重新 build 镜像
+      - ./core:/app/core:ro
+      - ./agents:/app/agents:ro
+      - ./main.py:/app/main.py:ro
+      - ./schedules.yaml:/app/schedules.yaml:ro
+    networks:
+      - rsshub_net
+
+networks:
+  rsshub_net:
+    external: true
+    # 注意：如果服务器上的 RSSHub 只加入了 Dify 网络（docker_default）或叫 rsshub_default，
+    # 可按 `docker ps --format "{{.Names}} {{.Networks}}"` 查到的实际网络名修改此处：
+    name: ${DOCKER_SHARED_NETWORK:-rsshub_default}

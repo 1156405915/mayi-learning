@@ -1,0 +1,17 @@
+# 多 Agent 统一定时任务配置表
+# 修改此文件后执行 `docker compose restart` 即可生效，无需重新构建镜像。
+# cron 字段采用标准 5 段式表达式：分 时 日 月 周（以容器时区 Asia/Shanghai 为准）
+
+timezone: Asia/Shanghai
+
+jobs:
+  daily_news:
+    enabled: true
+    cron: "0 8 * * *"        # 每天早上 08:00 自动推送新闻简报
+    description: "每日早间新闻简报（政策 / 财经 / 科技）"
+
+  # 后续新增 Agent 示例（取消注释并在 agents/registry.py 注册即可）：
+  # tech_hotspot:
+  #   enabled: true
+  #   cron: "0 20 * * *"     # 每天晚上 20:00 推送科技晚报
+  #   description: "晚间科技与开源热榜速递"

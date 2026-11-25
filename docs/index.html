@@ -1,22 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <title>Document</title>
-  <meta name="description" content="Description">
+  <title>Agent Learning - 实战与架构手册</title>
+  <meta name="description" content="个人 AI Agent 工程化实战、Docker 多 Agent 编排与架构复盘知识库">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@5/dist/themes/core.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@5/dist/themes/addons/vue.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    :root {
+      --theme-color: #2563eb;
+    }
+    .markdown-section {
+      max-width: 920px;
+    }
+    .mermaid {
+      text-align: center;
+      margin: 1.2rem 0;
+    }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">正在加载文档...</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
+    mermaid.initialize({ startOnLoad: false, theme: 'default' });
+    let mermaidId = 0;
+
     window.$docsify = {
-      name: '',
-      repo: ''
-    }
+      name: '🤖 Agent Learning',
+      repo: '',
+      loadSidebar: true,
+      subMaxLevel: 3,
+      auto2top: true,
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: '搜索架构方案 / Agent / 排障笔记...',
+        noData: '未找到匹配内容',
+        depth: 4
+      },
+      markdown: {
+        renderer: {
+          code: function (code, lang) {
+            if (lang === 'mermaid') {
+              const id = 'mermaid-svg-' + (mermaidId++);
+              return '<div class="mermaid" id="' + id + '">' + code + '</div>';
+            }
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      },
+      plugins: [
+        function (hook) {
+          hook.doneEach(function () {
+            mermaid.run({ querySelector: '.mermaid' });
+          });
+        }
+      ]
+    };
   </script>
-  <!-- Docsify resource -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@5"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
 </body>
 </html>
